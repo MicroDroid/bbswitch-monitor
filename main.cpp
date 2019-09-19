@@ -12,6 +12,8 @@
 #include <QProcess>
 #include <QFileSystemWatcher>
 
+#include <QDebug>
+
 const QString menuStyles =
     "QMenu {"
         "background: #080808;"
@@ -46,7 +48,9 @@ int main(int argc, char *argv[])
     QIcon iconOn(":/assets/on.png");
     QIcon iconOff(":/assets/off.png");
 
-    QSystemTrayIcon tray(isOn() ? iconOn : iconOff);
+    bool on = isOn();
+    QSystemTrayIcon tray(on ? iconOn : iconOff);
+    qInfo() << "Started monitoring, current state:" << (on ? "ON" : "OFF");
 
     QMenu menu;
     menu.setStyleSheet(menuStyles);
@@ -84,7 +88,10 @@ int main(int argc, char *argv[])
     watcher.addPath(bbswitch);
 
     QObject::connect(&watcher, &QFileSystemWatcher::fileChanged, [&tray, iconOn, iconOff] {
-        tray.setIcon(isOn() ? iconOn : iconOff);
+        bool on = isOn();
+
+        qInfo() << "GPU has been turned" << (on ? "ON" : "OFF");
+        tray.setIcon(on ? iconOn : iconOff);
     });
 
     return a.exec();
