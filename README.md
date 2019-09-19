@@ -7,6 +7,8 @@ This is a simple applet built with Qt to monitor external GPU status, whether it
 
 ```bash
 yay -S bbswitch-monitor
+systemctl --user enable bbswitch-monitor
+systemctl --user start bbswitch-monitor
 ```
 
 ### Other distros
